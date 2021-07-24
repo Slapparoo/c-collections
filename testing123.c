@@ -6,7 +6,7 @@ struct Testing123_code
     void (*addAge)(Pointer, int);
     void (*setName)(Pointer, PChar);
     void (*print)(Pointer);
-    PChar (*toString)(Pointer);
+    PChar (*toPChar)(Pointer);
 } Testing123_code;
 
 struct Testing123_data
@@ -34,7 +34,7 @@ void Testing123_setName(PTesting123 data, PChar name)
  * @param data 
  * @return char* 
  */
-PChar Testing123_toString(PTesting123 data) 
+PChar Testing123_toPChar(PTesting123 data) 
 {
     PChar format = ANSI_WHITE "age " ANSI_BOLD_BLUE  "%i, " ANSI_WHITE "name " ANSI_BOLD_BLUE "%s" ANSI_DEFAULT;
     return PStrings.formatString(format, data->age, data->name);
@@ -43,7 +43,7 @@ PChar Testing123_toString(PTesting123 data)
 
 void Testing123_print(PTesting123 data) 
 {
-    PChar message = data->code->toString(data);
+    PChar message = data->code->toPChar(data);
     Console.format("%s\n", message);
     Pointers.free(message);
 }
@@ -53,7 +53,7 @@ struct Testing123_code Testing123 = {
     &Testing123_addAge,
     &Testing123_setName,
     &Testing123_print,
-    &Testing123_toString,
+    &Testing123_toPChar,
 };
 
 

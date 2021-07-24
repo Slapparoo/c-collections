@@ -7,8 +7,8 @@
 #include "stdio.h"
 #include <stdarg.h>
 #include <stdlib.h>
-#include "hashcodes.h"
 #include "data-types.h"
+#include "ctype.h"
 
 PChar PString_code_formatString(const PChar format, ...);
 int ErrorConsole_print(const PChar format, ...);
@@ -68,6 +68,8 @@ struct Pointer_code {
     Pointer (*malloc)(u64 size); // Pointer malloc(u64 size)
     // Attempts to resize the memory block pointed to by ptr that was previously allocated with a call to malloc or calloc.
     Pointer (*realloc)(Pointer ptr, u64 size); // Pointer realloc(Pointer ptr, u64 size)
+    // Copy the contents of one pointer to the other
+    void (*swap)(Pointer a, Pointer b, i32 size); 
 
 } Pointer_code;
 
@@ -141,7 +143,13 @@ typedef struct PString_code {
     u64 (*wcstombs)(PChar str, const wchar_t *pwcs, u64 n); // u64 wcstombs(PChar str, const wchar_t *pwcs, u64 n)
     // Examines the code which corresponds to a multibyte character given by the argument wchar.
     int (*wctomb)(PChar str, wchar_t wchar); // int wctomb(PChar str, wchar_t wchar)
-
+    // return a new string where "replace" has been replaced with "with"
+    PChar (*replace)(const PChar string, const PChar replace, const PChar with);
+    PChar (*clone)(const PChar string);
+    // convert to upper case
+    PChar (*toUpper)(PChar string);
+    // conver to lower case
+    PChar (*toLower)(PChar string);
 } PString_code;
 
 typedef struct File_code {
@@ -160,7 +168,7 @@ typedef struct File_code {
     // Opens the filename pointed to by filename using the given mode.
     File (*open)(const PChar filename, const PChar mode); // FILE *fopen(const PChar filename, const PChar mode)
     // Reads data from the given stream into the array pointed to by ptr.
-    u64 (*readPointer)(Pointer ptr, u64 size, u64 nmemb, File stream); // u64 fread(Pointer ptr, u64 size, u64 nmemb, FILE *stream)
+    u64 (*readPointer)(Pointer ptr, u64 elementSize, u64 numberOfElements, File stream); // u64 fread(Pointer ptr, u64 size, u64 nmemb, FILE *stream)
     // Associates a new filename with the given open stream and same time closing the old file in stream.
     File (*reopen)(const PChar filename, const PChar mode, File stream); // FILE *freopen(const PChar filename, const PChar mode, FILE *stream)
     // Sets the file position of the stream to the given offset. The argument offset signifies the number of bytes to seek from the given whence position.
@@ -205,6 +213,8 @@ typedef struct File_code {
     // int (*putChar)(int char, File stream); // int putc(int char, FILE *stream)
     // Pushes the character char (an unsigned char) onto the specified stream so that the next character is read.
     int (*unreadChar)(int , File stream); // int ungetc(int char, FILE *stream)
+
+    u64 (*size)(File stream);
 } File_code;
 
 typedef struct Console_code {

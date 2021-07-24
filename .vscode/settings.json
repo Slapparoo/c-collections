@@ -40,6 +40,26 @@
         "hashes.h": "c",
         "base-object.h": "c",
         "object-types.h": "c",
-        "hashcodes.h": "c"
+        "hashcodes.h": "c",
+        "poly.h": "c",
+        "system_error": "cpp",
+        "unordered_map": "c",
+        "data-types.h": "c",
+        "inttypes.h": "c",
+        "stdint.h": "c",
+        "float.h": "c",
+        "strings.h": "c",
+        "stdlib.h": "c",
+        "limits.h": "c",
+        "baseobject.h": "c",
+        "stdio.h": "c",
+        "string.h": "c",
+        "bits.h": "c",
+        "rawtree.h": "c",
+        "list.h": "c",
+        "rawlinkedlist.h": "c",
+        "rawhashmap.h": "c",
+        "stdarg.h": "c",
+        "rawarraylist.h": "c"
     }
 }

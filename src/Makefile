@@ -1,27 +1,48 @@
-BINDIR = ../bin
-CC = clang
-ARGS = -g -o
-CFILES = template.c object-types.c hashcodes.c base-object.c
+#### new make
+# CC = clang
+CC = gcc
+ODIR = obj
+SDIR = src
+BDIR = bin
+HDIR = header
+TDIR = test
+LDIR = lib
+TBDIR = testbin
+SRCTEST = $(shell ls $(TDIR))
+SRC = $(shell ls $(SDIR))
+TESTMAIN = $(SRCTEST:%.c=$(TBDIR)/%)
+OBJFILES = $(SRC:%.c=$(ODIR)/%.o)
+STATICLIB = $(LDIR)/libcrlist.so
 
-tests: $(BINDIR)/template $(BINDIR)/baseobject $(BINDIR)/hashcodes $(BINDIR)/objecttypes
-cleantests:
-	rm $(BINDIR)/baseobject
-	rm $(BINDIR)/hashcodes
-	rm $(BINDIR)/objecttypes
-	rm $(BINDIR)/template
+ARGS = -Wno-incompatible-pointer-types -Wno-incompatible-function-pointer-types -fPIE -march=native -g -I$(HDIR)
+# ARGS = -fPIE -march=native -g -I$(HDIR)
+# ARGS = -fPIE -march=native -g -I$(HDIR)
 
-$(BINDIR)/baseobject: $(CFILES)
-	$(CC) $(ARGS) $(BINDIR)/baseobject -Wno-incompatible-pointer-types -DTEST_BASEOBJECT $(CFILES)
-	$(BINDIR)/baseobject
+$(TBDIR)/%: $(TDIR)/%.c
+	@echo "\033[0;32mCompile test $@\033[0m"
+	# $(CC) $(ARGS) $(STATICLIB) -o  $@ $< $(CFLAGS)
+	$(CC) $(ARGS) $(OBJFILES) lib/cmocka.c.o  -o $@ $< $(CFLAGS)
+	@echo "\033[0;32mRun test $@\033[0m"
+	time $@
 
-$(BINDIR)/hashcodes: $(CFILES)
-	$(CC) $(ARGS) $(BINDIR)/hashcodes -Wno-incompatible-pointer-types -DTEST_HASHES $(CFILES)
-	$(BINDIR)/hashcodes
+$(ODIR)/%.o: $(SDIR)/%.c
+	@echo "\033[0;32mCompile objects $@\033[0m"
+	$(CC) $(ARGS) -c -o $@ $< $(CFLAGS)
 
-$(BINDIR)/objecttypes: $(CFILES)
-	$(CC) $(ARGS) $(BINDIR)/objecttypes -Wno-incompatible-pointer-types -DTEST_OBJECT_TYPES $(CFILES)
-	$(BINDIR)/objecttypes
+.PHONY: clean
 
-$(BINDIR)/template: $(CFILES)
-	$(CC) $(ARGS) $(BINDIR)/template -Wno-incompatible-pointer-types -DTEST_TEMPLATE $(CFILES)
-	$(BINDIR)/template
+compile: $(OBJFILES) $(STATICLIB) $(TESTMAIN)
+
+clean:
+	@echo "\033[0;32mDeleting build artifacts..\033[0m"
+	rm -f $(ODIR)/*.o $(BDIR)/* $(TBDIR)/* $(STATICLIB)
+
+cleantest:
+	@echo "\033[0;32mDeleting tests binaries..\033[0m"
+	rm -f $(TBDIR)/*
+
+$(STATICLIB): 
+	@echo "\033[0;32mCOMPILING SOURCE $< INTO Dynamic Lib $@\033[0m"
+	@$(CC)  $(ARGS) -shared -fpic $(SDIR)/*.c $< -o $@	
+
+runtests: cleantest $(TESTMAIN)
