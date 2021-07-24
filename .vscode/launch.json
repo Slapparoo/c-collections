@@ -15,7 +15,7 @@
             "name": "(gdb) Launch",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/src/testbin/stress_test_hash",
+            "program": "${workspaceFolder}/src/testbin/test_rawlinkedlist",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${fileDirname}",

@@ -95,18 +95,6 @@ void RawLinkedlist_pushHead(PRawLinkedlist this, Pointer entry) {
 
 void RawLinkedlist_pushTail(PRawLinkedlist this, Pointer value) {
     // find next slot
-    int newIx = 0;
-
-    if (RawBitslist.isBit(this->nodeMap, this->length)) {
-        newIx = this->length;
-    } else {
-        newIx = RawBitslist.findFirst(this->nodeMap);
-    }
-
-    if (newIx == -1) {
-        printError("Failed to find empty bucket nx:%i, sz:%i", newIx, this->length);
-        exit(1);
-    }
 
     if (this->length == this->$capacity) {
         this->$nextShrink = this->$capacity;
@@ -114,6 +102,19 @@ void RawLinkedlist_pushTail(PRawLinkedlist this, Pointer value) {
         this->$nextGrow *= 2;
     }
 
+    int newIx = 0;
+
+    if (RawBitslist.isBit(this->nodeMap, this->length)) {
+        newIx = this->length;
+    } else {
+        newIx = RawBitslist_findFirst(this->nodeMap);
+    }
+
+
+    if (newIx == -1) {
+        printError("Failed to find empty bucket nx:%i, sz:%i", newIx, this->length);
+        exit(1);
+    }
 
     Pointer newEntry = ENTRY(this, newIx);
     STORE_VALUE(this, newEntry, value);

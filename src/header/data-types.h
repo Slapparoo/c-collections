@@ -57,7 +57,7 @@ typedef fpos_t * FilePos;
 // where as bit operations are performed in sequence by the CPU
 // #define FAST_HASH(x) (i32)x ^ (x * 131072) * 0x823A3481 * (x * 32)
 // #define FAST_HASH(x) x
-#define FAST_HASH(x) x ^ (x * 131072) * (x * 32) * x
+#define FAST_HASH(x) x ^ (x * 131072) * (x * 32)
 
 
 typedef __attribute__ ((nonnull (1, 2)))  void (*Fn_copy)(Pointer dest, const Pointer src);

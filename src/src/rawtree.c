@@ -182,23 +182,22 @@ static __inline__ Pointer RawTree_$insert(PRawTree this, int * index, Pointer ob
         return RAW_OBJECT(this, nodeIndex);
     }
 
-    PRawTreeNode node = RAW_NODE(this, *index);
-    int res = this->compare(object, RAW_OBJECT(this, *index));
+    int* insertNode = index;
+    while (*insertNode != -1) {
+        PRawTreeNode node = RAW_NODE(this, *insertNode);
+        int res = this->compare(object, RAW_OBJECT(this, *insertNode));
 
-    if (res > 0)
-    {
-        RawTree_$insert(this, &node->left, object);
+        if (res > 0)
+        {
+            insertNode = &node->left;
+        }
+        else if (res < 0)
+        {
+            insertNode = &node->right;
+        }
     }
-    else if (res < 0)
-    {
-        RawTree_$insert(this, &node->right, object);
-    }
-    else
-    {
-        printError("HashTree insert error == %p", object);
-        // over write object data
-        memcpy(RAW_OBJECT(this, *index), object, this->objectSize);
-    }
+
+    return RawTree_$insert(this, insertNode, object);
 }
 
 static __inline__ int RawTree_$deleteNode(PRawTree this, int index, Pointer object) {
@@ -217,11 +216,12 @@ static __inline__ int RawTree_$deleteNode(PRawTree this, int index, Pointer obje
         node->right = RawTree_$deleteNode(this, node->right, object);
     } else {
         // node with only one child or no child
-        if (node->left == -1 && node->right == -1) {
-            RawBitslist.setBit(this->nodesMap, index);
-            return index;
-        }
-        else if (node->left == -1) {
+        // if (node->left == -1 && node->right == -1) {
+        //     RawBitslist.setBit(this->nodesMap, index);
+        //     return index;
+        // }
+        // else 
+        if (node->left == -1) {
             RawBitslist.setBit(this->nodesMap, index);
             return node->right;
         }

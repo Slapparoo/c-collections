@@ -2,9 +2,9 @@
 #include <assert.h>
 
 
-// i32 myhash$32(u32* a) {
-//     return _FAST_HASH(*a);
-// }
+i32 myhash$32(u32* a) {
+    return *a;
+}
 
 int main(int argc, char const *argv[])
 {

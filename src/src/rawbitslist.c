@@ -47,7 +47,7 @@ void RawBitslist_set(const PRawBitslist this, const u32 index, const boolean val
 
 i32 RawBitslist_findFirst(const PRawBitslist this) {
   int res = 0;
-  for (int i = 0; i < this->$capacity; i++) {
+  for (int i = 0; i < this->$capacity -1; i++) {
     if (this->content[i])  {
         int offset = get_bit_leadingZeros$32(this->content[i]);
         if (offset < 32) {
@@ -55,6 +55,11 @@ i32 RawBitslist_findFirst(const PRawBitslist this) {
         }
     }
     res += 32;
+  }
+  for (int i = res; i < this->length; i++) {
+      if (is_bit$32(this->content, i)) {
+        return i;
+      }
   }
   return -1;
 }
