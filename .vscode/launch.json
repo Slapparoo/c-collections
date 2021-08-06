@@ -5,17 +5,10 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "type": "java",
-            "name": "Launch mappy",
-            "request": "launch",
-            "mainClass": "mappy",
-            "projectName": "brooks-object-c_5065fb2b"
-        },
-        {
             "name": "(gdb) Launch",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/collections/testbin/test_load_template",
+            "program": "${workspaceFolder}/testbin/${fileBasenameNoExtension}",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${fileDirname}",
@@ -29,6 +22,13 @@
                     "ignoreFailures": true
                 }
             ]
+        },
+        {
+            "type": "java",
+            "name": "Launch mappy",
+            "request": "launch",
+            "mainClass": "mappy",
+            "projectName": "brooks-object-c_5065fb2b"
         }
     ]
 }

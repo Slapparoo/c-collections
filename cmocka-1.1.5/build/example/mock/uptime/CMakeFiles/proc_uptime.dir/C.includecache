@@ -1,0 +1,32 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/brook/source/brooks-object-c/src/cmocka-1.1.5/example/mock/uptime/proc_uptime.c
+errno.h
+-
+stdio.h
+-
+stdlib.h
+-
+string.h
+-
+sys/types.h
+-
+sys/stat.h
+-
+fcntl.h
+-
+locale.h
+-
+unistd.h
+-
+proc_uptime.h
+/home/brook/source/brooks-object-c/src/cmocka-1.1.5/example/mock/uptime/proc_uptime.h
+
+/home/brook/source/brooks-object-c/src/cmocka-1.1.5/example/mock/uptime/proc_uptime.h
+

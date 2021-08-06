@@ -1,21 +1,48 @@
+#### new make
+# CC = clang
+CC = gcc
+ODIR = obj
+SDIR = src
+BDIR = bin
+HDIR = header
+TDIR = test
+LDIR = lib
+TBDIR = testbin
+SRCTEST = $(shell ls $(TDIR))
+SRC = $(shell ls $(SDIR))
+TESTMAIN = $(SRCTEST:%.c=$(TBDIR)/%)
+OBJFILES = $(SRC:%.c=$(ODIR)/%.o)
+STATICLIB = $(LDIR)/libcrlist.so
 
-SHELL=/bin/bash
-# SUBDIRS = $(wildcard */.)
-SOURCES = $(wildcard *.c) $(wildcard **/*.c)
-# SRC = $(shell find src -name "*.c")
-BIN = BIN
+ARGS = -Wno-incompatible-pointer-types -Wno-incompatible-function-pointer-types -fPIE -march=native -g -I$(HDIR)
+# ARGS = -fPIE -march=native -g -I$(HDIR)
+# ARGS = -fPIE -march=native -g -I$(HDIR)
 
+$(TBDIR)/%: $(TDIR)/%.c
+	@echo "\033[0;32mCompile test $@\033[0m"
+	# $(CC) $(ARGS) $(STATICLIB) -o  $@ $< $(CFLAGS)
+	$(CC) $(ARGS) $(OBJFILES) lib/cmocka.c.o  -o $@ $< $(CFLAGS)
+	@echo "\033[0;32mRun test $@\033[0m"
+	time $@
 
+$(ODIR)/%.o: $(SDIR)/%.c
+	@echo "\033[0;32mCompile objects $@\033[0m"
+	$(CC) $(ARGS) -c -o $@ $< $(CFLAGS)
 
-rwildcard=$(wildcard $1$2) $(foreach d,$(wildcard $1*),$(call rwildcard,$d/,$2))
+.PHONY: clean
 
-# How to recursively find all files with the same name in a given folder
-ALL_C := $(call rwildcard,src/,*.c)
+compile: $(OBJFILES) $(STATICLIB) $(TESTMAIN)
 
-clean :
-	@echo $(ALL_C)
-	# @echo $(SRC)
+clean:
+	@echo "\033[0;32mDeleting build artifacts..\033[0m"
+	rm -f $(ODIR)/*.o $(BDIR)/* $(TBDIR)/* $(STATICLIB)
 
-# runval : clean testing123
-#     valgrind --track-origins=yes --error-exitcode=2 --leak-check=full ./testing123
-	 
+cleantest:
+	@echo "\033[0;32mDeleting tests binaries..\033[0m"
+	rm -f $(TBDIR)/*
+
+$(STATICLIB): 
+	@echo "\033[0;32mCOMPILING SOURCE $< INTO Dynamic Lib $@\033[0m"
+	@$(CC)  $(ARGS) -shared -fpic $(SDIR)/*.c $< -o $@	
+
+runtests: cleantest $(TESTMAIN)

@@ -1,0 +1,1 @@
+/usr/bin/cc -g   -Wl,--wrap=uptime CMakeFiles/test_uptime.dir/test_uptime.c.o  -o test_uptime  -Wl,-rpath,/home/brook/source/brooks-object-c/src/cmocka-1.1.5/build/src ../../../src/libcmocka.so.0.7.0 /usr/lib/x86_64-linux-gnu/librt.so 

@@ -1,10 +1,5 @@
-testing123
-**.out
-**/bin/**
-**/testbin/**
-**/templates/**
-**/lib/**
-**/obj/**
-**/cmocka-1.1.5/**
-**.asm
-**.xz
+archive/*
+bin/*
+obj/*
+testbin/*
+
