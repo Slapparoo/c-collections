@@ -1,4 +1,4 @@
-#include "data-types.h"
+#include "collection_base.h"
 
 
 PrimativeType primativeTypess[] = {
@@ -43,6 +43,7 @@ int printPrimativeType(PrimativeType* pt) {
 int printPrimativeTypeByNum(int type) {
     printPrimativeType(&primativeTypess[type]);
 }
+
 i32 hash$Pointer(Pointer* val) {
     return FAST_HASH(*(u64*)val);
 }
@@ -51,11 +52,27 @@ i32 hash$64(i64* val) {
     return FAST_HASH(*val);
 }
 
+i32 hash$$PChar(PChar str) {
+    int res = 0;
+    int i = 0;
+    // printf("%s\n", str);
+    while (str[i]) {
+        res ^= (str[i] * 31) * (str[i] * (i + 1));
+        // printf("%c", str[i]);
+        i++;
+    }
+
+    return res;
+}
+
+
 i32 hash$PChar(PChar* str) {
     int res = 0;
     int i = 0;
-    while (*str[i] != 0) {
-        res += *str[i]*31^ *str[i];
+    PChar st = *str;
+    // printf("%s\n", st);
+    while (st[i]) {
+        res ^= (st[i] * 31) * (st[i] * (i + 31));
         i++;
     }
 
@@ -113,6 +130,21 @@ inline i32 compare$Pointer(Pointer* a, Pointer* b) {
     return *(Pointer*)a - *(Pointer*)b;
 
 }
+
+inline i32 compare$PChar(PChar a, PChar b) {
+    if (a == b) {
+        return 0;
+    }
+    if (a == null) {
+        return -1;
+    }
+    if (b == null) {
+        return 1;
+    }
+    return strcmp(a, b);
+
+}
+
 
 inline i32 hash$8(u8* value) {
     return FAST_HASH(*value * 256);

@@ -5,25 +5,30 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "clang-10 - Build and debug active file",
+            "name": "(gdb) Launch",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${fileDirname}/a.out",
+            "program": "${workspaceFolder}/testbin/${fileBasenameNoExtension}",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${fileDirname}",
             "environment": [],
             "externalConsole": false,
-            "MIMode": "lldb",
+            "MIMode": "gdb",
             "setupCommands": [
                 {
                     "description": "Enable pretty-printing for gdb",
                     "text": "-enable-pretty-printing",
                     "ignoreFailures": true
                 }
-            ],
-            "preLaunchTask": "C/C++: clang-10 build active file",
-            "miDebuggerPath": "/usr/bin/lldb-mi-10"
+            ]
+        },
+        {
+            "type": "java",
+            "name": "Launch mappy",
+            "request": "launch",
+            "mainClass": "mappy",
+            "projectName": "brooks-object-c_5065fb2b"
         }
     ]
 }

@@ -1,41 +1,63 @@
 #include "quicksort.h"
 
-// typedef int (*Fn_compareEntry)(const void *object, const int a, const int b);
-// typedef void (*Fn_swapEntry)(void *object, const int a, const int b);
-// typedef enum SortOrder {
-//     ascending  = 1,
-//     descending = -1
-// } SortOrder;
-
-// void fn_swap$(int *array, int a, int b)
-// {
-//     int tmp = array[a];
-//     array[a] = array[b];
-//     array[b] = tmp;
-// }
-
-// int fn_compare$(int *array, const int a, const int b)
-// {
-//     return array[a] - array[b];
-// }
 
 /**
- * @brief 
- * 
- * @param list 
- * @param first 
- * @param last 
- * @param asc  acsending 1 or -1
- * @param compare 
- * @param swap 
- */
-void quicksort(void *list, int first, int last, SortOrder sortOrder, Fn_compareEntry compare, Fn_swapEntry swap)
+ * @brief implementation of quicksort
+ * it is based on lists whihc can be indexed by int
+ * example:
+ 
+ int compare(int* list, int a, int b) {
+     return list[a] - list[b];
+ }
+ 
+ void swap(int* list, int a, int b) {
+    int tmp = a;
+    list[a] = list[b];
+    list[b] = tmp;
+ }
+ 
+ 
+ int main()
+ {
+    int i, count = 5, number[] = {2, 3, 7, 1, 5};
+
+    for (i = 0; i < count; i++)
+        printf(" %d", number[i]);
+
+    quicksort(number, 0, count - 1, ascending, &compare, &swap);
+
+    printf("\nOrder of Sorted elements:\n");
+    for (i = 0; i < count; i++)
+        printf(" %d", number[i]);
+    printf("\n");
+
+    quicksort(number, 0, count - 1, descending, &compare, &swap);
+
+    printf("\nOrder of Sorted elements:\n");
+    for (i = 0; i < count; i++)
+        printf(" %d", number[i]);
+    printf("\n");
+
+    quicksort(number, 2, count - 1, ascending, &compare, &swap);
+
+    printf("\nOrder of Sorted elements:\n");
+    for (i = 0; i < count; i++)
+        printf(" %d", number[i]);
+    printf("\n");
+
+    return 0;
+}
+*/
+
+void quicksort$(Pointer list, i32 first, i32 last, SortOrder sortOrder, PFn_compareEntry compare, PFn_swapEntry swap)
 {
-    int i, j, pivot;
+    i32 i, j, pivot;
 
     if (first < last)
     {
-        pivot = first;
+        // pivot = first;
+        // pivot = last;
+        pivot = first + ((last - first) / 2);
         i = first;
         j = last;
 
@@ -51,40 +73,102 @@ void quicksort(void *list, int first, int last, SortOrder sortOrder, Fn_compareE
             }
         }
 
-        swap(list, pivot, j);
+        if (compare(list, j, pivot) * sortOrder < 0) {
+            swap(list, pivot, j);
+        }
 
-        quicksort(list, first, j - 1, sortOrder, compare, swap);
-        quicksort(list, j + 1, last, sortOrder, compare, swap);
+        quicksort$(list, first, j - 1, sortOrder, compare, swap);
+        quicksort$(list, j + 1, last, sortOrder, compare, swap);
     }
 }
 
-// int main()
-// {
-//     int i, count = 5, number[] = {2, 3, 7, 1, 5};
+/* 
+ * 
+ * 
+ * @param list 
+ * @param first 
+ * @param last 
+ * @param asc  acsending 1 or -1
+ * @param compare 
+ * @param swap 
+ */
+void quicksortPrep(Pointer list, i32 first, i32 last, SortOrder sortOrder, PFn_compareEntry compare, PFn_swapEntry swap, PFn_relocateEntry relocate)
+{
+    if (relocate && last - first < 128) {
+        shortSort(list, first, last, sortOrder, compare, relocate);
+        return;
+    }
 
-//     for (i = 0; i < count; i++)
-//         printf(" %d", number[i]);
+    i32 mid = (last - first) / 2;
+    for (int i = first; i < first +mid; i++) {
+        if (compare(list, i, i+mid) * sortOrder > 0) {
+            swap(list, i, i+mid);
+        }
+    }
 
-//     quicksort(number, 0, count - 1, ascending, fn_compare$, fn_swap$);
+    if ((last - first) & 1) {
+        // odd
+        if (compare(list, mid, last) * sortOrder > 0) {
+            swap(list, mid, last);
+        }
+    } 
 
-//     printf("\nOrder of Sorted elements:\n");
-//     for (i = 0; i < count; i++)
-//         printf(" %d", number[i]);
-//     printf("\n");
+    sort(list, first, last, sortOrder, compare, swap, relocate);
+}
 
-//     quicksort(number, 0, count - 1, descending, fn_compare$, fn_swap$);
 
-//     printf("\nOrder of Sorted elements:\n");
-//     for (i = 0; i < count; i++)
-//         printf(" %d", number[i]);
-//     printf("\n");
+/* 
+ * 
+ * 
+ * @param list 
+ * @param first 
+ * @param last 
+ * @param asc  acsending 1 or -1
+ * @param compare 
+ * @param swap 
+ */
+void sort(Pointer list, i32 first, i32 last, SortOrder sortOrder, PFn_compareEntry compare, PFn_swapEntry swap, PFn_relocateEntry relocate)
+{
+    if (relocate && last - first < 256) {
+        shortSort(list, first, last, sortOrder, compare, relocate);
+        return;
+    }
 
-//     quicksort(number, 2, count - 1, ascending, fn_compare$, fn_swap$);
+    quicksort$(list, first, last, sortOrder, compare, swap);
+}
 
-//     printf("\nOrder of Sorted elements:\n");
-//     for (i = 0; i < count; i++)
-//         printf(" %d", number[i]);
-//     printf("\n");
 
+// i32 relocateEntry(int * arry, const i32 a, const i32 b) {
+//     if (a > b) {
+//         // no dice
+//         return -1;
+//     }
+//     int tmp = arry[b];
+//     memmove(&arry[a+1], &arry[a], (b - a) * sizeof(int));
+//     arry[a] = tmp;
 //     return 0;
 // }
+
+/* 
+ * used for short lists do a linear compare then relocate
+ *
+ * peformance when sorting short lists is better that quick sort (assuming the relocate function is optimal)
+ * 
+ * @param list 
+ * @param first 
+ * @param last 
+ * @param asc  acsending 1 or -1
+ * @param compare 
+ * @param swap 
+ */
+void shortSort(Pointer list, i32 first, i32 last, SortOrder sortOrder, PFn_compareEntry compare, PFn_relocateEntry relocate)
+{
+    for (int i = first + 1; i <= last; i++) {
+        for (int j = first; j < i; j++) {
+            if (compare(list, j, i) * sortOrder > 0) {
+                relocate(list, j, i);
+                break;
+            }
+        }
+    }
+}

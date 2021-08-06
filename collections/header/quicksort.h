@@ -1,7 +1,7 @@
 #ifndef QSORT_HH
 #define QSORT_HH
 
-#include "data-types.h"
+#include "collection_base.h"
 
 typedef enum SortOrder {
     ascending  = 1,
@@ -18,7 +18,9 @@ typedef enum SortOrder {
  * @param compare 
  * @param swap 
  */
-__attribute__ ((nonnull (1, 5, 6))) void quicksort(Pointer list, int first, int last, SortOrder sortOrder, Fn_compareEntry compare, Fn_swapEntry swap);
+__attribute__ ((nonnull (1, 5, 6))) void sort(Pointer list, i32 first, i32 last, SortOrder sortOrder, PFn_compareEntry compare, PFn_swapEntry swap, PFn_relocateEntry relocate);
+__attribute__ ((nonnull (1, 5, 6))) void quicksortPrep(Pointer list, i32 first, i32 last, SortOrder sortOrder, PFn_compareEntry compare, PFn_swapEntry swap, PFn_relocateEntry relocate);
+__attribute__ ((nonnull (1, 5, 6))) void shortSort(Pointer list, i32 first, i32 last, SortOrder sortOrder, PFn_compareEntry compare, PFn_relocateEntry relocate);
 
 
 #endif

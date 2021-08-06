@@ -60,6 +60,7 @@
         "rawlinkedlist.h": "c",
         "rawhashmap.h": "c",
         "stdarg.h": "c",
-        "rawarraylist.h": "c"
+        "rawarraylist.h": "c",
+        "alloca.h": "c"
     }
 }

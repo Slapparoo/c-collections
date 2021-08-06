@@ -7,12 +7,12 @@ function definitions
 directory hiereachy
 rewrite raw classes - rename from raw
 
-rawtree clear
-complete rawhashmap
+valuetree clear
+complete valuehashmap
 project layout
 unit test framework
 build
-rawtree shrink performance?
+valuetree shrink performance?
 
 functional area?
 sort (length, (*compare)(a,b), (*swap)(a,b))

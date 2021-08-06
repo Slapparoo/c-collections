@@ -1,4 +1,4 @@
-#include "object-types.h"
+#include "collection_base.h"
 
 
 /**
@@ -46,6 +46,13 @@ void Pointers_swap(Pointer a, Pointer b, i32 size) {
             Pointers.free(tmp);
         }
     }
+}
+
+//Fn_allocate -- typedef void (*Fn_allocate)(const u64 itemSize, const u64 numberOfItems, Fn_release);
+Pointer Pointers_malloc_allocate(const u64 itemSize, const u64 numberOfItems, PFn_release release) {
+    // where to store the release
+    
+    return calloc(itemSize, numberOfItems);
 }
 
 
@@ -161,6 +168,23 @@ PChar PChar_clone(PChar string) {
     PStrings.copy(res, string);
     return res;
 }
+
+/**
+ * @brief return a clone of the string
+ * the caller is responsible for freeing the memory
+ * @param string 
+ * @return PChar 
+ */
+PChar PChar_subString(PChar string, u32 len) {
+    PChar res = Pointers.malloc(len +1);
+    // for (int i = 0; i < len; i++) {
+    //     res[i] = string[i];
+    // }
+    PStrings.copyTo(res, string, len);
+    res[len] = 0;
+    return res;
+}
+
 /**
  * @brief Convert to upperCase - this will update the string contents to upper case
  * if this is undesirable clone it first;
@@ -223,10 +247,11 @@ struct PString_code PStrings = {
     &mbtowc,
     &wcstombs,
     &wctomb,
-    PString_code_replace,
-    PChar_clone,
-    PChar_toUpper,
-    PChar_toLower
+    &PString_code_replace,
+    &PChar_clone,
+    &PChar_toUpper,
+    &PChar_toLower,
+    &PChar_subString
 };
 
 u64 File_size(File f) {

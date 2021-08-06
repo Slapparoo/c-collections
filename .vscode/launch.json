@@ -15,7 +15,7 @@
             "name": "(gdb) Launch",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/src/testbin/test_rawlinkedlist",
+            "program": "${workspaceFolder}/collections/testbin/test_load_template",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${fileDirname}",
