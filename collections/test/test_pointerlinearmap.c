@@ -128,16 +128,13 @@ void test_remove (void ** state)
     assert_int_equal(storedValue, 41);
     u64 sameValue = (u64)PointerLinearmap_get(hashmap, (Pointer)key);
 
-    // assert_int_equal(sameValue[0], 57);
-    // assert_int_equal(sameValue[1], 100);
+    PointerLinearmap_deleteEntry(hashmap, (Pointer)key);
+    assert_int_equal(hashmap->length, 0);
+    sameValue = (u64)PointerLinearmap_get(hashmap, (Pointer)key);
+    assert_int_equal(sameValue, 0);
 
-    // PointerLinearmap_deleteEntry(hashmap, &value);
-    // assert_int_equal(hashmap->length, 0);
-    // sameValue = PointerLinearmap_get(hashmap, &value);
-    // assert_int_equal(sameValue, 0);
-
-    // PointerLinearmap_free(&hashmap);
-    // assert_true(!hashmap);
+    PointerLinearmap_free(&hashmap);
+    assert_true(!hashmap);
 }
 
 
