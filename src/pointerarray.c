@@ -109,6 +109,11 @@ Fn_removeEntry(PointerArray, PPointerArray) {
     }
 
     length--;
+
+    if (length == 0) {
+        $startIndex = 0;
+        $endIndex = 0;
+    }
 }
 
 /**

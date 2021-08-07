@@ -43,6 +43,7 @@
         "pointerarray.h": "c",
         "pointerhashmap.h": "c",
         "collection_base.h": "c",
-        "functiondefs.h": "c"
+        "functiondefs.h": "c",
+        "collections.h": "c"
     }
 }

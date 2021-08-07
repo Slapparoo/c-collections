@@ -27,7 +27,7 @@ static __inline__ void PointerHashmap_$alloc(PPointerHashmap this) {
 }
 
 static __inline__ Pointer PointerHashmap_$put(PPointerHashmap this, PPointerMapEntry entry, int hc, int ix) {
-    PPointerMapEntry hashEntry = &this->content[ix];
+    PPointerMapEntry hashEntry = &this->content[ix * 2];
     
     if (Bitslist_isBit(this->$collisionMap, ix)) {
         ValueTree_addEntry(this->$tree, entry);
@@ -86,7 +86,7 @@ static __inline__ void PointerHashmap_$resize(PPointerHashmap this, i32 newSize)
     PointerHashmap_$alloc(this);
 
     for (i32 i = 0; i < oldCapacity; i++) {
-        PPointerMapEntry entry = oldContent[i];
+        PPointerMapEntry entry = &oldContent[i * 2];
         if (entry->key) {
             i32 hc = abs(this->hashCode(entry->key));
             PointerHashmap_$put(this, entry, hc, hc % this->$capacity);
@@ -117,7 +117,7 @@ Fn_get(PointerHashmap, PPointerHashmap, Pointer, Pointer)
     //get the hash
     i32 hc = abs(this->hashCode(key));
     i32 ix = hc % this->$capacity;
-    PPointerMapEntry entry = &this->content[ix];
+    PPointerMapEntry entry = &this->content[ix *2];
 
     // entry had a collision and may be in the tree the Tree
     // the first entry remains in the hashmap, subsequent entries go to the tree
@@ -167,7 +167,7 @@ Fn_deleteEntry(PointerHashmap, PPointerHashmap, Pointer)
     //get the hash
     i32 hc = abs(this->hashCode(entry));
     i32 ix = hc % this->$capacity;
-    PPointerMapEntry hashEntry = &this->content[ix];
+    PPointerMapEntry hashEntry = &this->content[ix * 2];
 
     // entry had a collision and may be in the Tree
     if (Bitslist_isBit(this->$collisionMap, ix)) {
@@ -229,8 +229,8 @@ Fn_clear(PointerHashmap, PPointerHashmap)
 Fn_traverse(PointerHashmap, PPointerHashmap)
 {
     for (int i = 0; i < this->$capacity; i++) {
-        if (this->content[i]) {
-            traverser(other, &this->content[i]);
+        if (this->content[i * 2]) {
+            traverser(other, &this->content[i * 2]);
         }
     }
     ValueTree_traverse(this->$tree, other, traverser);

@@ -105,12 +105,14 @@ typedef __attribute__ ((nonnull (1)))  u32 (*PFn_sort)(Pointer object, PFn_compa
 #define Fn_toArray(class, T, entryType) __attribute__ ((nonnull (1))) entryType* class ## _toArray(T this)
 typedef __attribute__ ((nonnull (1)))  Pointer (*PFn_toArray)(Pointer object);
 
+#define Fn_hashcode(class) __attribute__ ((nonnull (1))) i32 class ## _hashcode(Pointer value)
+typedef __attribute__ ((nonnull (1))) i32 (*PFn_hashcode)(const Pointer value);
 
 typedef __attribute__ ((nonnull (1, 2)))  void (*PFn_copy)(Pointer dest, const Pointer src);
 
 typedef __attribute__ ((nonnull (1))) i32 (*PFn_release)(Pointer* object);
 typedef __attribute__ ((nonnull (1, 2))) void (*PFn_swap)(Pointer a, Pointer b);
-typedef __attribute__ ((nonnull (1))) i32 (*PFn_hashcode)(const Pointer a);
+
 typedef __attribute__ ((nonnull (1, 3))) void (*PFn_message)(const Pointer object, Pointer other, Pointer value);
 typedef Pointer (*PFn_allocate)(const u64 itemSize, const u64 numberOfItems, PFn_release);
 
