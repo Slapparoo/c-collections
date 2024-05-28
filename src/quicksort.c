@@ -150,6 +150,7 @@ void sort(Pointer list, i32 first, i32 last, SortOrder sortOrder, PFn_compareEnt
 // }
 
 /* 
+ * This is insertion sort not shortsort
  * used for short lists do a linear compare then relocate
  *
  * peformance when sorting short lists is better that quick sort (assuming the relocate function is optimal)
